@@ -82,8 +82,6 @@ paths:
           description: invalid input, object invalid
         409:
           description: an existing employee already exists
-  
-		  
 definitions:
   Employees:
     type: object
