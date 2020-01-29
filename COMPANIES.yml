@@ -18,7 +18,7 @@ tags:
   description: Operations available to regular developers
 
 # Added by API Auto Mocking Plugin
-host: kartikaz.com
+# host: kartikaz.com
 basePath: /k4863/kartikaz/1.0.0  
   
 schemes:
@@ -39,7 +39,11 @@ paths:
       summary: searches inventory
       operationId: searchInventory
       description: Retrieves company's employees.
+      consumes:
+      - application/json
+      - application/xml
       produces:
+      - application/xml
       - application/json
       parameters:
       - in: path
@@ -82,6 +86,24 @@ paths:
           description: invalid input, object invalid
         409:
           description: an existing employee already exists
+      security:
+        - company_auth:
+          - write:employees
+          - read:employees
+        
+securityDefinitions:
+  company_auth:
+    type: oauth2
+    authorizationUrl: http://petstore.swagger.io/oauth/dialog
+    flow: implicit
+    scopes:
+      write:employees: modify pets in your account
+      read:employees: read your pets
+  api_key:
+    type: apiKey
+    name: api_key
+    in: header
+    
 definitions:
   Employees:
     type: object
@@ -90,9 +112,8 @@ definitions:
       employees:
         type: array
         description: Employees items list.
-        items:			
+        items:      
           $ref: '#/definitions/Employee'
-    
   Employee:
     type: object
     description: Employee information.
@@ -114,7 +135,7 @@ definitions:
       salary:
         type: integer
         example: 100000
-        description: Address salary.	
+        description: Address salary.  
       joiningDate:
         type: string
         format: date-time
@@ -122,7 +143,7 @@ definitions:
       addresses:
         type: array
         description: Address items list.
-        items:			
+        items:      
           $ref: '#/definitions/Address'
   Address:
     type: object
@@ -153,3 +174,5 @@ definitions:
       city: "Japiur"
       state: "Rajasthan"
       zipCode: "123123"
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
