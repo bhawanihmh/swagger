@@ -1,0 +1,157 @@
+swagger: '2.0'
+info:
+  description: This is a API for Kartikaz
+  version: 1.0.0
+  title: Kartikaz Employee API
+  # put the contact info for your development or API team
+  contact:
+    email: bhawani.hmh@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# tags are used for organizing operations
+tags:
+- name: admins
+  description: Secured Admin-only calls
+- name: developers
+  description: Operations available to regular developers
+
+# Added by API Auto Mocking Plugin
+host: kartikaz.com
+basePath: /k4863/kartikaz/1.0.0  
+  
+schemes:
+ - https
+ - http
+
+servers:
+- url: http://kartikaz.com/v1
+  description: Optional server description, e.g. Main (production) server
+- url: http://kartikaz.com
+  description: Optional server description, e.g. Internal staging server for testing
+ 
+paths:
+  /{id}/employees:
+    get:
+      tags:
+      - developers
+      summary: searches inventory
+      operationId: searchInventory
+      description: Retrieves company's employees.
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Employees'
+        400:
+          description: bad input parameter
+    post:
+      tags:
+      - admins
+      summary: adds an employee 
+      operationId: addEmployee
+      description: Adds an employee to the system
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: id
+        required: true
+        type: integer      
+      - in: body
+        name: employee
+        description: Employee to add
+        schema:
+          $ref: '#/definitions/Employee'
+      responses:
+        201:
+          description: employee created
+        400:
+          description: invalid input, object invalid
+        409:
+          description: an existing employee already exists
+  
+		  
+definitions:
+  Employees:
+    type: object
+    description: Employees information list.  
+    properties:
+      employees:
+        type: array
+        description: Employees items list.
+        items:			
+          $ref: '#/definitions/Employee'
+    
+  Employee:
+    type: object
+    description: Employee information.
+    required:
+      - id
+      - name
+      - salary
+      - addresses
+      - joiningDate
+    properties:
+      id:
+        type: integer
+        example: 101
+        description: Address id.
+      name:
+        type: string
+        example: Bhawani Singh Shekhawat
+        description: Employee name.
+      salary:
+        type: integer
+        example: 100000
+        description: Address salary.	
+      joiningDate:
+        type: string
+        format: date-time
+        example: 2016-08-29T09:12:33.001Z
+      addresses:
+        type: array
+        description: Address items list.
+        items:			
+          $ref: '#/definitions/Address'
+  Address:
+    type: object
+    description: Address information
+    properties:
+      id:
+        type: integer
+        description: Address id
+      houseNumber:
+        type: string
+        description: House number
+      streetAddress:
+        type: string
+        description: Street address
+      city:
+        type: string
+        description: City
+      state:
+        type: string
+        description: State
+      zipCode:
+        type: string
+        description: Zip Code
+    example:
+      id: 1
+      houseNumber: "100"
+      streetAddress: "MI Road"
+      city: "Japiur"
+      state: "Rajasthan"
+      zipCode: "123123"
